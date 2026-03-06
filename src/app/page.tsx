@@ -1,65 +1,79 @@
-import Image from "next/image";
+import Scene from "@/components/canvas/Scene";
+import { ArrowDown } from "lucide-react";
+
+import ProjectGrid from "@/components/ui/ProjectGrid";
+import ContactSystem from "@/components/ui/ContactSystem";
+import ExperienceTimeline from "@/components/ui/ExperienceTimeline";
+import BlogGrid from "@/components/ui/BlogGrid";
+import StickyNav from "@/components/ui/StickyNav";
+import Footer from "@/components/ui/Footer";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="relative w-full">
+      <StickyNav />
+      {/* 3D Canvas Background */}
+      <Scene />
+
+      {/* Hero Section */}
+      <section className="relative h-screen flex flex-col items-center justify-center pointer-events-none select-none">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 mb-2 tracking-tighter mix-blend-plus-lighter">
+          AKASH GUPTA
+        </h1>
+        <p className="text-xl md:text-2xl text-white/70 max-w-2xl text-center font-light tracking-wide mb-12 mix-blend-plus-lighter drop-shadow-lg">
+          Full-Stack Developer & SEO Specialist
+        </p>
+
+        <div className="absolute bottom-10 animate-bounce text-white/50 flex flex-col items-center gap-2">
+          <span className="text-sm tracking-widest uppercase">Scroll</span>
+          <ArrowDown className="w-6 h-6" />
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="min-h-screen relative z-10 p-4 md:p-8 pt-24" id="projects">
+        <div className="max-w-7xl mx-auto glass p-8 md:p-12 rounded-3xl border border-white/10 shadow-emerald-500/10 shadow-2xl">
+          <h2 className="text-5xl font-bold mb-12 tracking-tight">Selected Works</h2>
+          <ProjectGrid />
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section className="min-h-screen relative z-10 p-4 md:p-8 pt-24" id="experience">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-5xl font-bold mb-16 tracking-tight">Career Journey</h2>
+          <ExperienceTimeline />
+        </div>
+      </section>
+
+      {/* Blogs Section */}
+      <section className="min-h-screen relative z-10 p-4 md:p-8 pt-24" id="blogs">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <h2 className="text-5xl font-bold tracking-tight">Insights & Writing</h2>
+            <div className="hidden md:block">
+              <button className="text-sm tracking-widest uppercase text-neon-purple hover:text-white transition-colors">
+                View All Archives
+              </button>
+            </div>
+          </div>
+          <BlogGrid />
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="min-h-screen relative z-10 p-4 md:p-8 flex flex-col items-center justify-center mt-24" id="contact">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-bold mb-4 tracking-tight">Let's Connect</h2>
+          <p className="text-white/50 max-w-lg mx-auto font-light">
+            Skip the noise. Enter your email below to verify your identity and send me a direct message to my secure inbox.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        
+        <ContactSystem />
+      </section>
+      
+      <Footer />
+    </main>
   );
 }
