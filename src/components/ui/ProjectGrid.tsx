@@ -1,7 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Pagination, Mousewheel } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
 
 interface Project {
   _id: string;
@@ -9,14 +15,14 @@ interface Project {
   description: string;
   image?: string;
   link?: string;
-  span?: string;
 }
 
 const mockProjects: Project[] = [
-  { _id: "1", title: "Skycart Ecommerce", description: "UI + SEO for live product using Laravel", span: "md:col-span-2 md:row-span-2", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1000&auto=format&fit=crop" },
-  { _id: "2", title: "VidMaxx", description: "AI-powered SaaS tool for video generation", span: "md:col-span-1 md:row-span-1", image: "https://images.unsplash.com/photo-1626544827763-d516dce335e4?q=80&w=1000&auto=format&fit=crop" },
-  { _id: "3", title: "Cosmo India", description: "Facebook ad campaigns & brand reach", span: "md:col-span-1 md:row-span-1", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" },
-  { _id: "4", title: "Kaal Coders", description: "SEO-ready mobile-first design", span: "md:col-span-3 md:row-span-1", image: "https://images.unsplash.com/photo-1507238692062-7301c22e43f3?q=80&w=1000&auto=format&fit=crop" }
+  { _id: "1", title: "Skycart Ecommerce", description: "UI + SEO for live product using Laravel", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1000&auto=format&fit=crop" },
+  { _id: "2", title: "VidMaxx", description: "AI-powered SaaS tool for video generation", image: "https://images.unsplash.com/photo-1626544827763-d516dce335e4?q=80&w=1000&auto=format&fit=crop" },
+  { _id: "3", title: "Cosmo India", description: "Facebook ad campaigns & brand reach", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" },
+  { _id: "4", title: "Kaal Coders", description: "SEO-ready mobile-first design", image: "https://images.unsplash.com/photo-1507238692062-7301c22e43f3?q=80&w=1000&auto=format&fit=crop" },
+  { _id: "5", title: "Neural Architect", description: "Spatial UI Portfolio featuring custom 3D engines", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" }
 ];
 
 function ProjectCard({ project }: { project: Project }) {
@@ -43,14 +49,17 @@ function ProjectCard({ project }: { project: Project }) {
   };
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ rotateX, rotateY }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      style={{ perspective: 1000, transformStyle: "preserve-3d" }}
-      className={`glass rounded-3xl p-6 flex flex-col justify-end min-h-[300px] relative overflow-hidden group cursor-pointer ${project.span}`}
+      style={{ 
+        perspective: 1000, 
+        transformStyle: "preserve-3d",
+        transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+        transition: "transform 0.1s ease-out"
+      }}
+      className="glass rounded-3xl p-6 flex flex-col justify-end h-[400px] w-full relative overflow-hidden group cursor-pointer"
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10 pointer-events-none" />
       
@@ -69,18 +78,54 @@ function ProjectCard({ project }: { project: Project }) {
         </p>
       </div>
 
-      {/* Decorative gradient orb on hover */}
       <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-neon-purple/30 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-    </motion.div>
+    </div>
   );
 }
 
 export default function ProjectGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[250px]">
-      {mockProjects.map(p => (
-        <ProjectCard key={p._id} project={p} />
-      ))}
+    <div className="w-full -mx-4 md:-mx-8 px-4 md:px-8">
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={30}
+        freeMode={true}
+        mousewheel={{
+          forceToAxis: true,
+        }}
+        pagination={{
+          clickable: true,
+          dynamicBullets: true,
+        }}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
+        modules={[FreeMode, Pagination, Mousewheel]}
+        className="w-full pb-16 pt-4 px-4"
+      >
+        {mockProjects.map(p => (
+          <SwiperSlide key={p._id} className="pt-4">
+            <ProjectCard project={p} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      
+      {/* Global override for Swiper pagination bullets to match Neon Noir aesthetic */}
+      <style jsx global>{`
+        .swiper-pagination-bullet {
+          background: rgba(255, 255, 255, 0.2);
+          opacity: 1;
+        }
+        .swiper-pagination-bullet-active {
+          background: #b026ff;
+          box-shadow: 0 0 10px #b026ff;
+        }
+      `}</style>
     </div>
   );
 }

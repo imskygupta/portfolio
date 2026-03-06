@@ -1,60 +1,129 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, BookOpen } from "lucide-react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Pagination, Mousewheel } from "swiper/modules";
 
-const mockBlogs = [
-  {
-    id: 1,
-    title: "The Future of Spatial UI in Web Applications",
-    date: "Mar 2026",
-    excerpt: "Why the 3D web is becoming the new standard for luxury digital experiences...",
-    readTime: "5 min read"
-  },
-  {
-    id: 2,
-    title: "Mastering Next.js 15 Server Actions",
-    date: "Feb 2026",
-    excerpt: "How to eliminate API routes and streamline your full-stack monorepo completely.",
-    readTime: "8 min read"
-  }
-];
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
+
+interface BlogPost {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  created_at: string;
+}
 
 export default function BlogGrid() {
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("https://skycart.xyz/api/v1/posts?per_page=10", {
+          headers: {
+             "Authorization": "Bearer 1|ShrQ5sREOU0fo2UlzdXF3AMiXwsnmWTpDqtyCvC4ed37d7f8"
+          }
+        });
+        const json = await response.json();
+        if (json && json.data) {
+          setBlogs(json.data);
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center py-20">
+        <div className="w-8 h-8 rounded-full border-t-2 border-neon-purple animate-spin" />
+      </div>
+    );
+  }
+
+  if (blogs.length === 0) {
+    return (
+      <div className="w-full text-center py-20 text-white/50">
+        No insights available at the moment.
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
-      {mockBlogs.map((blog, idx) => (
-        <motion.div
-          key={blog.id}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: idx * 0.1 }}
-          className="glass p-8 rounded-3xl flex flex-col justify-between group hover:border-white/30 transition-colors"
-        >
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-neon-purple text-sm font-semibold tracking-widest uppercase">
-                {blog.date}
-              </span>
-              <div className="p-2 bg-white/5 rounded-full text-white/50 group-hover:text-white transition-colors">
-                <BookOpen className="w-4 h-4" />
+    <div className="w-full -mx-4 md:-mx-8 px-4 md:px-8">
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={30}
+        freeMode={true}
+        mousewheel={{
+          forceToAxis: true,
+        }}
+        pagination={{
+          clickable: true,
+          dynamicBullets: true,
+        }}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+        modules={[FreeMode, Pagination, Mousewheel]}
+        className="w-full pb-16 pt-4 px-4"
+      >
+        {blogs.map((blog) => (
+          <SwiperSlide key={blog.id} className="pt-4 h-full">
+            <a 
+              // Directing user to their blog viewing mechanism (assuming slug-based view on origin domain or custom routing)
+              href={`https://skycart.xyz/blog/${blog.slug}`} 
+              target="_blank"
+              rel="noreferrer"
+              className="glass rounded-3xl p-6 group cursor-pointer border border-transparent hover:border-white/10 transition-all duration-300 block flex flex-col h-full bg-black/40 min-h-[350px]"
+            >
+              <div className="relative w-full h-[180px] bg-black/50 rounded-2xl overflow-hidden mb-6">
+                 {/* Next.js Image component optimization is skipped for dynamic external blob integration */}
+                 {blog.image ? (
+                   <img src={blog.image} alt={blog.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80" />
+                 ) : (
+                   <div className="w-full h-full flex items-center justify-center text-white/20">No Image</div>
+                 )}
+                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                 <div className="absolute bottom-3 left-3 flex gap-2">
+                   <span className="px-2 py-1 bg-white/10 backdrop-blur-md rounded-md text-[10px] font-medium tracking-wider uppercase text-white/80 border border-white/10">
+                     Article
+                   </span>
+                 </div>
               </div>
-            </div>
-            <h3 className="text-2xl font-bold mb-3 tracking-tight group-hover:text-neon-purple transition-colors">
-              {blog.title}
-            </h3>
-            <p className="text-white/60 font-light leading-relaxed mb-6">
-              {blog.excerpt}
-            </p>
-          </div>
-          
-          <Link href={`/blogs/${blog.id}`} className="inline-flex items-center gap-2 text-sm text-white/50 group-hover:text-white transition-colors w-fit">
-            Read Article <ArrowRight className="w-4 h-4" />
-          </Link>
-        </motion.div>
-      ))}
+              <div className="flex justify-between items-start gap-4 flex-1">
+                <div>
+                  <h3 className="font-bold text-lg leading-tight mb-2 group-hover:text-neon-purple transition-colors line-clamp-2">
+                    {blog.name}
+                  </h3>
+                  <p className="text-white/50 text-sm line-clamp-3 font-light mb-4 text-ellipsis overflow-hidden">
+                    {blog.description}
+                  </p>
+                </div>
+                <div className="p-2 bg-white/5 rounded-full group-hover:bg-neon-purple group-hover:text-white transition-colors shrink-0">
+                  <ArrowUpRight className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="mt-auto pt-4 border-t border-white/10 text-xs text-white/40">
+                 {new Date(blog.created_at).toLocaleDateString(undefined, {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                 })}
+              </div>
+            </a>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
