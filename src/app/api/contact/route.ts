@@ -4,12 +4,12 @@ import connectDB from "@/lib/mongodb";
 import { Contact, OTP } from "@/models/Contact";
 
 const transporter = nodemailer.createTransport({
-  host: "mail.skycart.xyz", // Secure SSL/TLS Outgoing Server
-  port: 465, // SMTP Port
+  host: process.env.EMAIL_HOST || "mail.skycart.xyz",
+  port: Number(process.env.EMAIL_PORT) || 465,
   secure: true,
   auth: {
-    user: "portfolio@skycart.xyz",
-    pass: process.env.EMAIL_PASS || "Akash@98890", 
+    user: process.env.EMAIL_USER || "portfolio@skycart.xyz",
+    pass: process.env.EMAIL_PASS,
   },
 });
 
