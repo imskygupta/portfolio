@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       await OTP.findOneAndUpdate({ email }, { otp: code, email }, { upsert: true, new: true });
 
       await transporter.sendMail({
-        from: '"Skycart Portfolio" <products@skycart.xyz>',
+        from: '"Skycart Portfolio" <portfolio@skycart.xyz>',
         to: email,
         subject: "Your Contact Verification Code",
         html: `<p>Your verification code is: <strong>${code}</strong></p><p>This code expires in 5 minutes.</p>`,
@@ -53,8 +53,8 @@ export async function POST(req: Request) {
 
       // Notify the owner
       await transporter.sendMail({
-        from: '"Skycart Portfolio" <products@skycart.xyz>',
-        to: "products@skycart.xyz", // Or whoever receives contacts
+        from: '"Skycart Portfolio" <portfolio@skycart.xyz>',
+        to: "portfolio@skycart.xyz", // Send to the portfolio email or specify another admin
         subject: `New Portfolio Inquiry from ${email}`,
         text: `You have a new message from ${email}:\n\n${message}`,
       });
