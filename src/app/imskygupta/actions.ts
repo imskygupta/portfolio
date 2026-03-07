@@ -7,7 +7,7 @@ export async function login(prevState: any, formData: FormData) {
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: "/admin",
+      redirectTo: "/imskygupta",
     });
     return undefined;
   } catch (error: any) {

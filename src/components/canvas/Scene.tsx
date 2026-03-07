@@ -3,7 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import SolarSystem from "./SolarSystem";
+import SpaceScene from "./SpaceScene";
 import { Suspense } from "react";
 
 export default function Scene() {
@@ -14,7 +14,7 @@ export default function Scene() {
         <ambientLight intensity={0.2} />
         
         <Suspense fallback={null}>
-          <SolarSystem />
+          <SpaceScene />
           <Environment resolution={256}>
             <group rotation={[-Math.PI / 3, 0, 1]}>
               <Lightformer form="circle" intensity={5} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />
