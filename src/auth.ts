@@ -17,15 +17,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const inputPassword = credentials?.password as string;
 
         // Ensure default admin exists if DB is empty for admin
-        let adminUser = await Admin.findOne({ email: "contact@skycart.xyz" });
+        let adminUser = await Admin.findOne({ email: "portfolio@skycart.xyz" });
         
         if (!adminUser) {
            // Seed initial default admin on first run (unhashed for simplicity in this port, or could add bcrypt)
            // For a standard portfolio, we can just store plain text string if bcrypt isn't installed to avoid errors, 
            // but normally we'd hash. Assuming plain/simple check for now.
            adminUser = await Admin.create({ 
-               email: "contact@skycart.xyz", 
-               passwordHash: "Akash@1234" 
+               email: "portfolio@skycart.xyz", 
+               passwordHash: "Akash@12349" 
            });
         }
 
